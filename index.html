@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KTANE Module Helper</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="module-header">
+        <div>
+          <p class="eyebrow">Keep Talking and Nobody Explodes</p>
+          <h1>Complicated Wires</h1>
+        </div>
+        <div class="legend" aria-label="Result legend">
+          <span><strong>C</strong> Cut</span>
+          <span><strong>D</strong> Do not cut</span>
+          <span><strong>S</strong> Cut if serial number is even</span>
+          <span><strong>P</strong> Cut if parallel port exists</span>
+          <span><strong>B</strong> Cut if 2+ batteries</span>
+        </div>
+      </header>
+
+      <section class="wire-panel" aria-labelledby="wire-table-title">
+        <div class="panel-title">
+          <h2 id="wire-table-title">Six Wires</h2>
+          <button class="reset-button" type="button" id="resetButton">Reset</button>
+        </div>
+
+        <div class="wire-table" role="table" aria-label="Complicated Wires lookup">
+          <div class="wire-row table-head" role="row">
+            <div role="columnheader">Wire</div>
+            <div role="columnheader">Red</div>
+            <div role="columnheader">Blue</div>
+            <div role="columnheader">Star</div>
+            <div role="columnheader">LED</div>
+            <div role="columnheader">Result</div>
+          </div>
+
+          <div id="wireRows"></div>
+        </div>
+      </section>
+    </main>
+
+    <template id="wireRowTemplate">
+      <div class="wire-row" role="row">
+        <div class="wire-number" role="cell"></div>
+        <label class="toggle" role="cell">
+          <input type="checkbox" data-prop="red">
+          <span>Red</span>
+        </label>
+        <label class="toggle" role="cell">
+          <input type="checkbox" data-prop="blue">
+          <span>Blue</span>
+        </label>
+        <label class="toggle" role="cell">
+          <input type="checkbox" data-prop="star">
+          <span>Star</span>
+        </label>
+        <label class="toggle" role="cell">
+          <input type="checkbox" data-prop="led">
+          <span>LED</span>
+        </label>
+        <output class="result" role="cell"></output>
+      </div>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>
