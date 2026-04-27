@@ -31,6 +31,7 @@
         <button type="button" data-module-tab="wire-sequences" data-i18n="module.wireSequences">Wire Sequences</button>
         <button type="button" data-module-tab="memory" data-i18n="module.memory">Memory</button>
         <button type="button" data-module-tab="passwords" data-i18n="module.passwords">Passwords</button>
+        <button type="button" data-module-tab="morse-code" data-i18n="module.morseCode">Morse Code</button>
       </nav>
 
       <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
@@ -123,6 +124,30 @@
           <div class="password-results">
             <div class="password-count" id="passwordCount"></div>
             <div class="password-list" id="passwordList" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="wire-panel is-hidden" id="morse-code" data-module-panel aria-labelledby="morse-title">
+        <div class="panel-title">
+          <h2 id="morse-title" data-i18n="module.morseCode">Morse Code</h2>
+          <button class="reset-button" type="button" id="morseResetButton" data-i18n="action.reset">Reset</button>
+        </div>
+
+        <div class="morse-tool">
+          <label class="morse-input">
+            <span data-i18n="morse.substring">Signal substring</span>
+            <input type="text" id="morseInput" autocomplete="off" spellcheck="false">
+          </label>
+
+          <div class="morse-reference">
+            <h3 data-i18n="morse.alphabet">Morse Alphabet</h3>
+            <div class="morse-alphabet" id="morseAlphabet"></div>
+          </div>
+
+          <div class="morse-results">
+            <div class="password-count" id="morseCount"></div>
+            <div class="morse-list" id="morseList" aria-live="polite"></div>
           </div>
         </div>
       </section>

@@ -409,7 +409,8 @@ h2 {
   color: var(--muted);
 }
 
-.password-tool {
+.password-tool,
+.morse-tool {
   display: grid;
   gap: 18px;
   padding: 16px;
@@ -486,6 +487,113 @@ h2 {
   border-radius: 4px;
   background: var(--panel-soft);
   color: var(--muted);
+}
+
+.morse-input {
+  display: grid;
+  gap: 7px;
+}
+
+.morse-input span,
+.morse-reference h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.morse-input input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #191919;
+  color: var(--text);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.morse-input input:focus {
+  border-color: var(--accent);
+  outline: 0;
+}
+
+.morse-results,
+.morse-reference {
+  display: grid;
+  gap: 10px;
+}
+
+.morse-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.morse-word,
+.morse-letter {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+}
+
+.morse-word {
+  display: grid;
+  gap: 4px;
+  min-height: 62px;
+  padding: 10px 12px;
+}
+
+.morse-word strong {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.morse-word span {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.morse-code {
+  color: var(--muted);
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+}
+
+.morse-alphabet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 8px;
+}
+
+.morse-letter {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+  padding: 9px 10px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.morse-letter strong {
+  color: var(--accent);
+}
+
+.morse-letter span {
+  color: var(--text);
+  font-family: "Courier New", monospace;
+  font-weight: 800;
+}
+
+.morse-letter:hover,
+.morse-letter:focus-visible {
+  border-color: var(--accent);
+  outline: 0;
 }
 
 @media (max-width: 760px) {

@@ -61,6 +61,54 @@ const passwordWords = [
   "write",
 ];
 
+const morseAlphabet = {
+  a: ".-",
+  b: "-...",
+  c: "-.-.",
+  d: "-..",
+  e: ".",
+  f: "..-.",
+  g: "--.",
+  h: "....",
+  i: "..",
+  j: ".---",
+  k: "-.-",
+  l: ".-..",
+  m: "--",
+  n: "-.",
+  o: "---",
+  p: ".--.",
+  q: "--.-",
+  r: ".-.",
+  s: "...",
+  t: "-",
+  u: "..-",
+  v: "...-",
+  w: ".--",
+  x: "-..-",
+  y: "-.--",
+  z: "--..",
+};
+
+const morseWords = [
+  { word: "shell", frequency: "3.505 MHz" },
+  { word: "halls", frequency: "3.515 MHz" },
+  { word: "slick", frequency: "3.522 MHz" },
+  { word: "trick", frequency: "3.532 MHz" },
+  { word: "boxes", frequency: "3.535 MHz" },
+  { word: "leaks", frequency: "3.542 MHz" },
+  { word: "strobe", frequency: "3.545 MHz" },
+  { word: "bistro", frequency: "3.552 MHz" },
+  { word: "flick", frequency: "3.555 MHz" },
+  { word: "bombs", frequency: "3.565 MHz" },
+  { word: "break", frequency: "3.572 MHz" },
+  { word: "brick", frequency: "3.575 MHz" },
+  { word: "steak", frequency: "3.582 MHz" },
+  { word: "sting", frequency: "3.592 MHz" },
+  { word: "vector", frequency: "3.595 MHz" },
+  { word: "beats", frequency: "3.600 MHz" },
+];
+
 const translations = {
   en: {
     "app.title": "Module Helper",
@@ -73,6 +121,7 @@ const translations = {
     "module.wireSequences": "Wire Sequences",
     "module.memory": "Memory",
     "module.passwords": "Passwords",
+    "module.morseCode": "Morse Code",
     "action.reset": "Reset",
     "table.wire": "Wire",
     "table.result": "Result",
@@ -100,6 +149,10 @@ const translations = {
     "password.position5": "Position 5",
     "password.available": "{count} available",
     "password.noMatches": "No matching passwords",
+    "morse.substring": "Signal substring",
+    "morse.alphabet": "Morse Alphabet",
+    "morse.matches": "{count} matches",
+    "morse.noMatches": "No matching words",
     "generated.wire": "Wire {number}",
     "generated.stage": "Stage {number}",
   },
@@ -114,6 +167,7 @@ const translations = {
     "module.wireSequences": "线路序列",
     "module.memory": "记忆",
     "module.passwords": "密码",
+    "module.morseCode": "摩尔斯电码",
     "action.reset": "重置",
     "table.wire": "线路",
     "table.result": "结果",
@@ -141,6 +195,10 @@ const translations = {
     "password.position5": "第 5 位",
     "password.available": "可用 {count} 个",
     "password.noMatches": "没有匹配的密码",
+    "morse.substring": "信号片段",
+    "morse.alphabet": "摩尔斯字母表",
+    "morse.matches": "匹配 {count} 个",
+    "morse.noMatches": "没有匹配的单词",
     "generated.wire": "线路 {number}",
     "generated.stage": "阶段 {number}",
   },
@@ -162,6 +220,11 @@ const passwordInputs = document.querySelectorAll("[data-password-position]");
 const passwordList = document.querySelector("#passwordList");
 const passwordCount = document.querySelector("#passwordCount");
 const passwordResetButton = document.querySelector("#passwordResetButton");
+const morseInput = document.querySelector("#morseInput");
+const morseList = document.querySelector("#morseList");
+const morseCount = document.querySelector("#morseCount");
+const morseAlphabetContainer = document.querySelector("#morseAlphabet");
+const morseResetButton = document.querySelector("#morseResetButton");
 const moduleTabs = document.querySelectorAll("[data-module-tab]");
 const modulePanels = document.querySelectorAll("[data-module-panel]");
 const languageButtons = document.querySelectorAll("[data-language]");
@@ -529,6 +592,74 @@ function resetPasswords() {
   updatePasswordResults();
 }
 
+function wordToMorse(word) {
+  return [...word].map((letter) => morseAlphabet[letter]).join(" ");
+}
+
+function normalizeMorseInput(value) {
+  return value.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+function updateMorseResults() {
+  const substring = normalizeMorseInput(morseInput.value);
+  const matches = morseWords.filter(({ word }) => !substring || word.includes(substring));
+
+  morseCount.textContent = t("morse.matches", { count: matches.length });
+  morseList.replaceChildren();
+
+  if (!matches.length) {
+    const empty = document.createElement("div");
+    empty.className = "password-empty";
+    empty.textContent = t("morse.noMatches");
+    morseList.append(empty);
+    return;
+  }
+
+  matches.forEach(({ word, frequency }) => {
+    const item = document.createElement("div");
+    const wordLabel = document.createElement("strong");
+    const frequencyLabel = document.createElement("span");
+    const code = document.createElement("div");
+
+    item.className = "morse-word";
+    wordLabel.textContent = word.toUpperCase();
+    frequencyLabel.textContent = frequency;
+    code.className = "morse-code";
+    code.textContent = wordToMorse(word);
+
+    item.append(wordLabel, frequencyLabel, code);
+    morseList.append(item);
+  });
+}
+
+function renderMorseAlphabet() {
+  morseAlphabetContainer.replaceChildren();
+
+  Object.entries(morseAlphabet).forEach(([letter, code]) => {
+    const item = document.createElement("button");
+    const letterLabel = document.createElement("strong");
+    const codeLabel = document.createElement("span");
+
+    item.type = "button";
+    item.className = "morse-letter";
+    letterLabel.textContent = letter.toUpperCase();
+    codeLabel.textContent = code;
+    item.addEventListener("click", () => {
+      morseInput.value += letter.toUpperCase();
+      updateMorseResults();
+      morseInput.focus();
+    });
+
+    item.append(letterLabel, codeLabel);
+    morseAlphabetContainer.append(item);
+  });
+}
+
+function resetMorse() {
+  morseInput.value = "";
+  updateMorseResults();
+}
+
 function refreshGeneratedLabels() {
   document.querySelectorAll("[data-generated-label]").forEach((element) => {
     const key =
@@ -544,6 +675,7 @@ function setLanguage(language) {
   updateSequenceResults();
   updateMemoryResults();
   updatePasswordResults();
+  updateMorseResults();
 }
 
 function showModule(moduleId) {
@@ -572,11 +704,14 @@ applyTranslations();
 updateSequenceResults();
 updateMemoryResults();
 updatePasswordResults();
+renderMorseAlphabet();
+updateMorseResults();
 
 resetButton.addEventListener("click", resetWires);
 sequenceResetButton.addEventListener("click", resetSequences);
 memoryResetButton.addEventListener("click", resetMemory);
 passwordResetButton.addEventListener("click", resetPasswords);
+morseResetButton.addEventListener("click", resetMorse);
 
 passwordInputs.forEach((input) => {
   input.addEventListener("input", () => {
@@ -584,6 +719,11 @@ passwordInputs.forEach((input) => {
     input.value = normalized.toUpperCase();
     updatePasswordResults();
   });
+});
+
+morseInput.addEventListener("input", () => {
+  morseInput.value = normalizeMorseInput(morseInput.value).toUpperCase();
+  updateMorseResults();
 });
 
 languageButtons.forEach((button) => {
