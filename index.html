@@ -26,6 +26,7 @@
         <button type="button" data-module-tab="complicated-wires" class="is-selected">Complicated Wires</button>
         <button type="button" data-module-tab="wire-sequences">Wire Sequences</button>
         <button type="button" data-module-tab="memory">Memory</button>
+        <button type="button" data-module-tab="passwords">Passwords</button>
       </nav>
 
       <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
@@ -82,6 +83,43 @@
           </div>
 
           <div id="memoryRows"></div>
+        </div>
+      </section>
+
+      <section class="wire-panel is-hidden" id="passwords" data-module-panel aria-labelledby="passwords-title">
+        <div class="panel-title">
+          <h2 id="passwords-title">Passwords</h2>
+          <button class="reset-button" type="button" id="passwordResetButton">Reset</button>
+        </div>
+
+        <div class="password-tool">
+          <div class="password-inputs" aria-label="Letter options by position">
+            <label>
+              <span>Position 1</span>
+              <input type="text" maxlength="26" data-password-position="0" autocomplete="off" spellcheck="false">
+            </label>
+            <label>
+              <span>Position 2</span>
+              <input type="text" maxlength="26" data-password-position="1" autocomplete="off" spellcheck="false">
+            </label>
+            <label>
+              <span>Position 3</span>
+              <input type="text" maxlength="26" data-password-position="2" autocomplete="off" spellcheck="false">
+            </label>
+            <label>
+              <span>Position 4</span>
+              <input type="text" maxlength="26" data-password-position="3" autocomplete="off" spellcheck="false">
+            </label>
+            <label>
+              <span>Position 5</span>
+              <input type="text" maxlength="26" data-password-position="4" autocomplete="off" spellcheck="false">
+            </label>
+          </div>
+
+          <div class="password-results">
+            <div class="password-count" id="passwordCount"></div>
+            <div class="password-list" id="passwordList" aria-live="polite"></div>
+          </div>
         </div>
       </section>
     </main>

@@ -23,6 +23,44 @@ const wireSequenceLookup = {
   black: ["ABC", "AC", "B", "AC", "B", "BC", "AB", "C", "C"],
 };
 
+const passwordWords = [
+  "about",
+  "after",
+  "again",
+  "below",
+  "could",
+  "every",
+  "first",
+  "found",
+  "great",
+  "house",
+  "large",
+  "learn",
+  "never",
+  "other",
+  "place",
+  "plant",
+  "point",
+  "right",
+  "small",
+  "sound",
+  "spell",
+  "still",
+  "study",
+  "their",
+  "there",
+  "these",
+  "thing",
+  "think",
+  "three",
+  "water",
+  "where",
+  "which",
+  "world",
+  "would",
+  "write",
+];
+
 const propertyOrder = ["red", "blue", "star", "led"];
 const rowContainer = document.querySelector("#wireRows");
 const rowTemplate = document.querySelector("#wireRowTemplate");
@@ -33,6 +71,10 @@ const sequenceResetButton = document.querySelector("#sequenceResetButton");
 const memoryRowContainer = document.querySelector("#memoryRows");
 const memoryRowTemplate = document.querySelector("#memoryRowTemplate");
 const memoryResetButton = document.querySelector("#memoryResetButton");
+const passwordInputs = document.querySelectorAll("[data-password-position]");
+const passwordList = document.querySelector("#passwordList");
+const passwordCount = document.querySelector("#passwordCount");
+const passwordResetButton = document.querySelector("#passwordResetButton");
 const moduleTabs = document.querySelectorAll("[data-module-tab]");
 const modulePanels = document.querySelectorAll("[data-module-panel]");
 
@@ -326,6 +368,47 @@ function resetMemory() {
   updateMemoryResults();
 }
 
+function normalizePasswordLetters(value) {
+  return [...new Set(value.toLowerCase().replace(/[^a-z]/g, ""))].join("");
+}
+
+function getPasswordOptions() {
+  return [...passwordInputs].map((input) => normalizePasswordLetters(input.value));
+}
+
+function updatePasswordResults() {
+  const options = getPasswordOptions();
+  const matches = passwordWords.filter((word) =>
+    options.every((letters, index) => !letters || letters.includes(word[index]))
+  );
+
+  passwordCount.textContent = `${matches.length} available`;
+  passwordList.replaceChildren();
+
+  if (!matches.length) {
+    const empty = document.createElement("div");
+    empty.className = "password-empty";
+    empty.textContent = "No matching passwords";
+    passwordList.append(empty);
+    return;
+  }
+
+  matches.forEach((word) => {
+    const item = document.createElement("div");
+    item.className = "password-word";
+    item.textContent = word.toUpperCase();
+    passwordList.append(item);
+  });
+}
+
+function resetPasswords() {
+  passwordInputs.forEach((input) => {
+    input.value = "";
+  });
+
+  updatePasswordResults();
+}
+
 function showModule(moduleId) {
   moduleTabs.forEach((tab) => {
     tab.classList.toggle("is-selected", tab.dataset.moduleTab === moduleId);
@@ -350,10 +433,20 @@ for (let stageNumber = 1; stageNumber <= 5; stageNumber += 1) {
 
 updateSequenceResults();
 updateMemoryResults();
+updatePasswordResults();
 
 resetButton.addEventListener("click", resetWires);
 sequenceResetButton.addEventListener("click", resetSequences);
 memoryResetButton.addEventListener("click", resetMemory);
+passwordResetButton.addEventListener("click", resetPasswords);
+
+passwordInputs.forEach((input) => {
+  input.addEventListener("input", () => {
+    const normalized = normalizePasswordLetters(input.value);
+    input.value = normalized.toUpperCase();
+    updatePasswordResults();
+  });
+});
 
 moduleTabs.forEach((tab) => {
   tab.addEventListener("click", () => showModule(tab.dataset.moduleTab));
