@@ -11,38 +11,42 @@
       <header class="module-header">
         <div>
           <p class="eyebrow">Keep Talking and Nobody Explodes</p>
-          <h1>Module Helper</h1>
+          <h1 data-i18n="app.title">Module Helper</h1>
         </div>
         <div class="legend" aria-label="Result legend">
-          <span><strong>C</strong> Cut</span>
-          <span><strong>D</strong> Do not cut</span>
-          <span><strong>S</strong> Cut if serial number is even</span>
-          <span><strong>P</strong> Cut if parallel port exists</span>
-          <span><strong>B</strong> Cut if 2+ batteries</span>
+          <span><strong>C</strong> <span data-i18n="legend.cut">Cut</span></span>
+          <span><strong>D</strong> <span data-i18n="legend.dontCut">Do not cut</span></span>
+          <span><strong>S</strong> <span data-i18n="legend.serial">Cut if serial number is even</span></span>
+          <span><strong>P</strong> <span data-i18n="legend.parallel">Cut if parallel port exists</span></span>
+          <span><strong>B</strong> <span data-i18n="legend.batteries">Cut if 2+ batteries</span></span>
+        </div>
+        <div class="language-switcher" aria-label="Language">
+          <button type="button" data-language="en" class="is-selected">EN</button>
+          <button type="button" data-language="zh">中文</button>
         </div>
       </header>
 
       <nav class="module-tabs" aria-label="Module selection">
-        <button type="button" data-module-tab="complicated-wires" class="is-selected">Complicated Wires</button>
-        <button type="button" data-module-tab="wire-sequences">Wire Sequences</button>
-        <button type="button" data-module-tab="memory">Memory</button>
-        <button type="button" data-module-tab="passwords">Passwords</button>
+        <button type="button" data-module-tab="complicated-wires" data-i18n="module.complicatedWires" class="is-selected">Complicated Wires</button>
+        <button type="button" data-module-tab="wire-sequences" data-i18n="module.wireSequences">Wire Sequences</button>
+        <button type="button" data-module-tab="memory" data-i18n="module.memory">Memory</button>
+        <button type="button" data-module-tab="passwords" data-i18n="module.passwords">Passwords</button>
       </nav>
 
       <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
         <div class="panel-title">
-          <h2 id="wire-table-title">Complicated Wires</h2>
-          <button class="reset-button" type="button" id="resetButton">Reset</button>
+          <h2 id="wire-table-title" data-i18n="module.complicatedWires">Complicated Wires</h2>
+          <button class="reset-button" type="button" id="resetButton" data-i18n="action.reset">Reset</button>
         </div>
 
         <div class="wire-table" role="table" aria-label="Complicated Wires lookup">
           <div class="wire-row table-head" role="row">
-            <div role="columnheader">Wire</div>
-            <div role="columnheader">Red</div>
-            <div role="columnheader">Blue</div>
-            <div role="columnheader">Star</div>
-            <div role="columnheader">LED</div>
-            <div role="columnheader">Result</div>
+            <div role="columnheader" data-i18n="table.wire">Wire</div>
+            <div role="columnheader" data-i18n="color.red">Red</div>
+            <div role="columnheader" data-i18n="color.blue">Blue</div>
+            <div role="columnheader" data-i18n="wire.star">Star</div>
+            <div role="columnheader" data-i18n="wire.led">LED</div>
+            <div role="columnheader" data-i18n="table.result">Result</div>
           </div>
 
           <div id="wireRows"></div>
@@ -51,17 +55,17 @@
 
       <section class="wire-panel is-hidden" id="wire-sequences" data-module-panel aria-labelledby="sequence-table-title">
         <div class="panel-title">
-          <h2 id="sequence-table-title">Wire Sequences</h2>
-          <button class="reset-button" type="button" id="sequenceResetButton">Reset</button>
+          <h2 id="sequence-table-title" data-i18n="module.wireSequences">Wire Sequences</h2>
+          <button class="reset-button" type="button" id="sequenceResetButton" data-i18n="action.reset">Reset</button>
         </div>
 
         <div class="wire-table" role="table" aria-label="Wire Sequences lookup">
           <div class="sequence-row table-head" role="row">
-            <div role="columnheader">Wire</div>
-            <div role="columnheader">Color</div>
-            <div role="columnheader">To</div>
-            <div role="columnheader">Occurrence</div>
-            <div role="columnheader">Result</div>
+            <div role="columnheader" data-i18n="table.wire">Wire</div>
+            <div role="columnheader" data-i18n="table.color">Color</div>
+            <div role="columnheader" data-i18n="table.to">To</div>
+            <div role="columnheader" data-i18n="table.occurrence">Occurrence</div>
+            <div role="columnheader" data-i18n="table.result">Result</div>
           </div>
 
           <div id="sequenceRows"></div>
@@ -70,16 +74,16 @@
 
       <section class="wire-panel is-hidden" id="memory" data-module-panel aria-labelledby="memory-table-title">
         <div class="panel-title">
-          <h2 id="memory-table-title">Memory</h2>
-          <button class="reset-button" type="button" id="memoryResetButton">Reset</button>
+          <h2 id="memory-table-title" data-i18n="module.memory">Memory</h2>
+          <button class="reset-button" type="button" id="memoryResetButton" data-i18n="action.reset">Reset</button>
         </div>
 
         <div class="wire-table" role="table" aria-label="Memory lookup">
           <div class="memory-row table-head" role="row">
-            <div role="columnheader">Stage</div>
-            <div role="columnheader">Display</div>
-            <div role="columnheader">Button Labels</div>
-            <div role="columnheader">Press</div>
+            <div role="columnheader" data-i18n="memory.stage">Stage</div>
+            <div role="columnheader" data-i18n="memory.display">Display</div>
+            <div role="columnheader" data-i18n="memory.buttonLabels">Button Labels</div>
+            <div role="columnheader" data-i18n="memory.press">Press</div>
           </div>
 
           <div id="memoryRows"></div>
@@ -88,30 +92,30 @@
 
       <section class="wire-panel is-hidden" id="passwords" data-module-panel aria-labelledby="passwords-title">
         <div class="panel-title">
-          <h2 id="passwords-title">Passwords</h2>
-          <button class="reset-button" type="button" id="passwordResetButton">Reset</button>
+          <h2 id="passwords-title" data-i18n="module.passwords">Passwords</h2>
+          <button class="reset-button" type="button" id="passwordResetButton" data-i18n="action.reset">Reset</button>
         </div>
 
         <div class="password-tool">
           <div class="password-inputs" aria-label="Letter options by position">
             <label>
-              <span>Position 1</span>
+              <span data-i18n="password.position1">Position 1</span>
               <input type="text" maxlength="26" data-password-position="0" autocomplete="off" spellcheck="false">
             </label>
             <label>
-              <span>Position 2</span>
+              <span data-i18n="password.position2">Position 2</span>
               <input type="text" maxlength="26" data-password-position="1" autocomplete="off" spellcheck="false">
             </label>
             <label>
-              <span>Position 3</span>
+              <span data-i18n="password.position3">Position 3</span>
               <input type="text" maxlength="26" data-password-position="2" autocomplete="off" spellcheck="false">
             </label>
             <label>
-              <span>Position 4</span>
+              <span data-i18n="password.position4">Position 4</span>
               <input type="text" maxlength="26" data-password-position="3" autocomplete="off" spellcheck="false">
             </label>
             <label>
-              <span>Position 5</span>
+              <span data-i18n="password.position5">Position 5</span>
               <input type="text" maxlength="26" data-password-position="4" autocomplete="off" spellcheck="false">
             </label>
           </div>
@@ -129,19 +133,19 @@
         <div class="wire-number" role="cell"></div>
         <label class="toggle" role="cell">
           <input type="checkbox" data-prop="red">
-          <span>Red</span>
+          <span data-i18n="color.red">Red</span>
         </label>
         <label class="toggle" role="cell">
           <input type="checkbox" data-prop="blue">
-          <span>Blue</span>
+          <span data-i18n="color.blue">Blue</span>
         </label>
         <label class="toggle" role="cell">
           <input type="checkbox" data-prop="star">
-          <span>Star</span>
+          <span data-i18n="wire.star">Star</span>
         </label>
         <label class="toggle" role="cell">
           <input type="checkbox" data-prop="led">
-          <span>LED</span>
+          <span data-i18n="wire.led">LED</span>
         </label>
         <output class="result" role="cell"></output>
       </div>
@@ -151,10 +155,10 @@
       <div class="sequence-row" role="row">
         <div class="wire-number" role="cell"></div>
         <div class="button-group color-buttons" role="cell" aria-label="Wire color">
-          <button type="button" data-sequence-color="">None</button>
-          <button type="button" data-sequence-color="red">Red</button>
-          <button type="button" data-sequence-color="blue">Blue</button>
-          <button type="button" data-sequence-color="black">Black</button>
+          <button type="button" data-sequence-color="" data-i18n="sequence.none">None</button>
+          <button type="button" data-sequence-color="red" data-i18n="color.red">Red</button>
+          <button type="button" data-sequence-color="blue" data-i18n="color.blue">Blue</button>
+          <button type="button" data-sequence-color="black" data-i18n="color.black">Black</button>
         </div>
         <div class="button-group target-buttons" role="cell" aria-label="Wire destination">
           <button type="button" data-sequence-target="A">A</button>

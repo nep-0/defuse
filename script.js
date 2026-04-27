@@ -61,6 +61,93 @@ const passwordWords = [
   "write",
 ];
 
+const translations = {
+  en: {
+    "app.title": "Module Helper",
+    "legend.cut": "Cut",
+    "legend.dontCut": "Do not cut",
+    "legend.serial": "Cut if serial number is even",
+    "legend.parallel": "Cut if parallel port exists",
+    "legend.batteries": "Cut if 2+ batteries",
+    "module.complicatedWires": "Complicated Wires",
+    "module.wireSequences": "Wire Sequences",
+    "module.memory": "Memory",
+    "module.passwords": "Passwords",
+    "action.reset": "Reset",
+    "table.wire": "Wire",
+    "table.result": "Result",
+    "table.color": "Color",
+    "table.to": "To",
+    "table.occurrence": "Occurrence",
+    "color.red": "Red",
+    "color.blue": "Blue",
+    "color.black": "Black",
+    "wire.star": "Star",
+    "wire.led": "LED",
+    "sequence.none": "None",
+    "sequence.cut": "Cut",
+    "sequence.dontCut": "Do not cut",
+    "sequence.noTable": "No table",
+    "memory.stage": "Stage",
+    "memory.display": "Display",
+    "memory.buttonLabels": "Button Labels",
+    "memory.press": "Press",
+    "memory.checkLabels": "Check labels",
+    "password.position1": "Position 1",
+    "password.position2": "Position 2",
+    "password.position3": "Position 3",
+    "password.position4": "Position 4",
+    "password.position5": "Position 5",
+    "password.available": "{count} available",
+    "password.noMatches": "No matching passwords",
+    "generated.wire": "Wire {number}",
+    "generated.stage": "Stage {number}",
+  },
+  zh: {
+    "app.title": "模块助手",
+    "legend.cut": "剪断",
+    "legend.dontCut": "不要剪",
+    "legend.serial": "序列号为偶数则剪断",
+    "legend.parallel": "有并口则剪断",
+    "legend.batteries": "电池不少于 2 个则剪断",
+    "module.complicatedWires": "复杂线路",
+    "module.wireSequences": "线路序列",
+    "module.memory": "记忆",
+    "module.passwords": "密码",
+    "action.reset": "重置",
+    "table.wire": "线路",
+    "table.result": "结果",
+    "table.color": "颜色",
+    "table.to": "连到",
+    "table.occurrence": "次数",
+    "color.red": "红",
+    "color.blue": "蓝",
+    "color.black": "黑",
+    "wire.star": "星星",
+    "wire.led": "LED",
+    "sequence.none": "无",
+    "sequence.cut": "剪断",
+    "sequence.dontCut": "不要剪",
+    "sequence.noTable": "无表项",
+    "memory.stage": "阶段",
+    "memory.display": "显示",
+    "memory.buttonLabels": "按钮标签",
+    "memory.press": "按下",
+    "memory.checkLabels": "检查标签",
+    "password.position1": "第 1 位",
+    "password.position2": "第 2 位",
+    "password.position3": "第 3 位",
+    "password.position4": "第 4 位",
+    "password.position5": "第 5 位",
+    "password.available": "可用 {count} 个",
+    "password.noMatches": "没有匹配的密码",
+    "generated.wire": "线路 {number}",
+    "generated.stage": "阶段 {number}",
+  },
+};
+
+let currentLanguage = "en";
+
 const propertyOrder = ["red", "blue", "star", "led"];
 const rowContainer = document.querySelector("#wireRows");
 const rowTemplate = document.querySelector("#wireRowTemplate");
@@ -77,6 +164,28 @@ const passwordCount = document.querySelector("#passwordCount");
 const passwordResetButton = document.querySelector("#passwordResetButton");
 const moduleTabs = document.querySelectorAll("[data-module-tab]");
 const modulePanels = document.querySelectorAll("[data-module-panel]");
+const languageButtons = document.querySelectorAll("[data-language]");
+
+function t(key, replacements = {}) {
+  const template = translations[currentLanguage][key] || translations.en[key] || key;
+  return Object.entries(replacements).reduce(
+    (text, [name, value]) => text.replace(`{${name}}`, value),
+    template
+  );
+}
+
+function applyTranslations() {
+  document.documentElement.lang = currentLanguage === "zh" ? "zh-CN" : "en";
+  document.title = `KTANE ${t("app.title")}`;
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    element.textContent = t(element.dataset.i18n);
+  });
+
+  languageButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.language === currentLanguage);
+  });
+}
 
 function getLookupKey(row) {
   return propertyOrder
@@ -97,7 +206,9 @@ function createWireRow(wireNumber) {
   const row = fragment.querySelector(".wire-row");
   const label = fragment.querySelector(".wire-number");
 
-  label.textContent = `Wire ${wireNumber}`;
+  label.dataset.generatedLabel = "wire";
+  label.dataset.number = wireNumber;
+  label.textContent = t("generated.wire", { number: wireNumber });
 
   row.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
     checkbox.name = `wire-${wireNumber}-${checkbox.dataset.prop}`;
@@ -151,7 +262,12 @@ function updateSequenceResults() {
     const shouldCut = cutTargets.includes(target);
 
     occurrenceOutput.value = occurrence > 9 ? "10+" : `${occurrence}`;
-    resultOutput.value = occurrence > 9 ? "No table" : shouldCut ? "Cut" : "Do not cut";
+    resultOutput.value =
+      occurrence > 9
+        ? t("sequence.noTable")
+        : shouldCut
+          ? t("sequence.cut")
+          : t("sequence.dontCut");
     resultOutput.classList.add(shouldCut && occurrence <= 9 ? "cut" : "skip");
   });
 }
@@ -161,7 +277,9 @@ function createSequenceRow(wireNumber) {
   const row = fragment.querySelector(".sequence-row");
   const label = fragment.querySelector(".wire-number");
 
-  label.textContent = `Wire ${wireNumber}`;
+  label.dataset.generatedLabel = "wire";
+  label.dataset.number = wireNumber;
+  label.textContent = t("generated.wire", { number: wireNumber });
 
   row.querySelector('[data-sequence-color=""]').classList.add("is-selected");
   row.querySelector('[data-sequence-target="A"]').classList.add("is-selected");
@@ -315,7 +433,7 @@ function updateMemoryResults() {
     const press = resolveMemoryPress(stageNumber, display, labels, history);
 
     if (!press || !press.position) {
-      result.value = "Check labels";
+      result.value = t("memory.checkLabels");
       result.classList.add("empty");
       return;
     }
@@ -331,7 +449,9 @@ function createMemoryRow(stageNumber) {
   const row = fragment.querySelector(".memory-row");
   const label = fragment.querySelector(".wire-number");
 
-  label.textContent = `Stage ${stageNumber}`;
+  label.dataset.generatedLabel = "stage";
+  label.dataset.number = stageNumber;
+  label.textContent = t("generated.stage", { number: stageNumber });
 
   row.querySelectorAll("[data-memory-display]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -382,13 +502,13 @@ function updatePasswordResults() {
     options.every((letters, index) => !letters || letters.includes(word[index]))
   );
 
-  passwordCount.textContent = `${matches.length} available`;
+  passwordCount.textContent = t("password.available", { count: matches.length });
   passwordList.replaceChildren();
 
   if (!matches.length) {
     const empty = document.createElement("div");
     empty.className = "password-empty";
-    empty.textContent = "No matching passwords";
+    empty.textContent = t("password.noMatches");
     passwordList.append(empty);
     return;
   }
@@ -406,6 +526,23 @@ function resetPasswords() {
     input.value = "";
   });
 
+  updatePasswordResults();
+}
+
+function refreshGeneratedLabels() {
+  document.querySelectorAll("[data-generated-label]").forEach((element) => {
+    const key =
+      element.dataset.generatedLabel === "stage" ? "generated.stage" : "generated.wire";
+    element.textContent = t(key, { number: element.dataset.number });
+  });
+}
+
+function setLanguage(language) {
+  currentLanguage = translations[language] ? language : "en";
+  applyTranslations();
+  refreshGeneratedLabels();
+  updateSequenceResults();
+  updateMemoryResults();
   updatePasswordResults();
 }
 
@@ -431,6 +568,7 @@ for (let stageNumber = 1; stageNumber <= 5; stageNumber += 1) {
   memoryRowContainer.append(createMemoryRow(stageNumber));
 }
 
+applyTranslations();
 updateSequenceResults();
 updateMemoryResults();
 updatePasswordResults();
@@ -446,6 +584,10 @@ passwordInputs.forEach((input) => {
     input.value = normalized.toUpperCase();
     updatePasswordResults();
   });
+});
+
+languageButtons.forEach((button) => {
+  button.addEventListener("click", () => setLanguage(button.dataset.language));
 });
 
 moduleTabs.forEach((tab) => {

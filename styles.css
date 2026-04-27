@@ -37,7 +37,7 @@ input {
 
 .module-header {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(280px, 520px);
+  grid-template-columns: minmax(260px, 1fr) minmax(280px, 520px) auto;
   gap: 24px;
   align-items: end;
   margin-bottom: 24px;
@@ -85,6 +85,31 @@ h2 {
 .legend strong {
   color: var(--text);
   margin-right: 5px;
+}
+
+.language-switcher {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.language-switcher button {
+  min-height: 34px;
+  min-width: 48px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #1d1d1d;
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.language-switcher button:hover,
+.language-switcher button:focus-visible,
+.language-switcher button.is-selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent), transparent 80%);
+  outline: 0;
 }
 
 .module-tabs {
@@ -472,6 +497,10 @@ h2 {
   .module-header {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .language-switcher {
+    justify-content: flex-start;
   }
 
   .legend {
