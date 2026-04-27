@@ -159,6 +159,7 @@ const translations = {
     "password.allEntered": "All positions entered",
     "password.noCandidates": "No candidates remain",
     "morse.substring": "Signal substring",
+    "morse.substringHint": "Use spaces to search multiple substrings.",
     "morse.alphabet": "Morse Alphabet",
     "morse.matches": "{count} matches",
     "morse.noMatches": "No matching words",
@@ -214,6 +215,7 @@ const translations = {
     "password.allEntered": "所有位置已输入",
     "password.noCandidates": "没有剩余候选",
     "morse.substring": "信号片段",
+    "morse.substringHint": "用空格分隔多个片段进行搜索。",
     "morse.alphabet": "摩尔斯字母表",
     "morse.matches": "匹配 {count} 个",
     "morse.noMatches": "没有匹配的单词",
@@ -721,12 +723,18 @@ function wordToMorse(word) {
 }
 
 function normalizeMorseInput(value) {
-  return value.toLowerCase().replace(/[^a-z]/g, "");
+  return value
+    .toLowerCase()
+    .replace(/[^a-z\s]/g, "")
+    .replace(/\s+/g, " ")
+    .trimStart();
 }
 
 function updateMorseResults() {
-  const substring = normalizeMorseInput(morseInput.value);
-  const matches = morseWords.filter(({ word }) => !substring || word.includes(substring));
+  const substrings = normalizeMorseInput(morseInput.value).trim().split(" ").filter(Boolean);
+  const matches = morseWords.filter(({ word }) =>
+    substrings.every((substring) => word.includes(substring))
+  );
 
   morseCount.textContent = t("morse.matches", { count: matches.length });
   morseList.replaceChildren();

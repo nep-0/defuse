@@ -580,6 +580,12 @@ h2 {
   text-transform: uppercase;
 }
 
+.morse-input small {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
 .morse-input input {
   width: 100%;
   min-height: 48px;
