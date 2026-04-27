@@ -79,6 +79,21 @@
           <button class="reset-button" type="button" id="memoryResetButton" data-i18n="action.reset">Reset</button>
         </div>
 
+        <div class="memory-keyboard">
+          <label>
+            <span data-i18n="memory.keyboardInput">Keyboard input</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              pattern="[1-4]*"
+              maxlength="5"
+              id="memoryKeyboardInput"
+              autocomplete="off"
+            >
+          </label>
+          <div class="memory-keyboard-status" id="memoryKeyboardStatus"></div>
+        </div>
+
         <div class="wire-table" role="table" aria-label="Memory lookup">
           <div class="memory-row table-head" role="row">
             <div role="columnheader" data-i18n="memory.stage">Stage</div>

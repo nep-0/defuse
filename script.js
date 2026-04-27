@@ -142,6 +142,11 @@ const translations = {
     "memory.buttonLabels": "Button Labels",
     "memory.press": "Press",
     "memory.checkLabels": "Check labels",
+    "memory.keyboardInput": "Keyboard input",
+    "memory.keyboardReady": "Stage {stage}: type display + 4 labels, then Enter",
+    "memory.keyboardApplied": "Stage {stage} applied",
+    "memory.keyboardDone": "All stages entered",
+    "memory.keyboardInvalid": "Use five digits from 1 to 4",
     "password.position1": "Position 1",
     "password.position2": "Position 2",
     "password.position3": "Position 3",
@@ -188,6 +193,11 @@ const translations = {
     "memory.buttonLabels": "按钮标签",
     "memory.press": "按下",
     "memory.checkLabels": "检查标签",
+    "memory.keyboardInput": "键盘输入",
+    "memory.keyboardReady": "阶段 {stage}：输入显示数字 + 4 个标签，然后回车",
+    "memory.keyboardApplied": "阶段 {stage} 已填入",
+    "memory.keyboardDone": "所有阶段已填入",
+    "memory.keyboardInvalid": "请输入 5 个 1 到 4 的数字",
     "password.position1": "第 1 位",
     "password.position2": "第 2 位",
     "password.position3": "第 3 位",
@@ -216,6 +226,8 @@ const sequenceResetButton = document.querySelector("#sequenceResetButton");
 const memoryRowContainer = document.querySelector("#memoryRows");
 const memoryRowTemplate = document.querySelector("#memoryRowTemplate");
 const memoryResetButton = document.querySelector("#memoryResetButton");
+const memoryKeyboardInput = document.querySelector("#memoryKeyboardInput");
+const memoryKeyboardStatus = document.querySelector("#memoryKeyboardStatus");
 const passwordInputs = document.querySelectorAll("[data-password-position]");
 const passwordList = document.querySelector("#passwordList");
 const passwordCount = document.querySelector("#passwordCount");
@@ -228,6 +240,7 @@ const morseResetButton = document.querySelector("#morseResetButton");
 const moduleTabs = document.querySelectorAll("[data-module-tab]");
 const modulePanels = document.querySelectorAll("[data-module-panel]");
 const languageButtons = document.querySelectorAll("[data-language]");
+let activeMemoryStage = 1;
 
 function t(key, replacements = {}) {
   const template = translations[currentLanguage][key] || translations.en[key] || key;
@@ -388,6 +401,17 @@ function getMemoryRows() {
   return [...memoryRowContainer.querySelectorAll(".memory-row")];
 }
 
+function setActiveMemoryStage(stageNumber) {
+  activeMemoryStage = Math.min(Math.max(stageNumber, 1), 5);
+
+  getMemoryRows().forEach((row, index) => {
+    row.classList.toggle("is-active", index + 1 === activeMemoryStage);
+  });
+
+  memoryKeyboardStatus.classList.remove("is-error");
+  memoryKeyboardStatus.textContent = t("memory.keyboardReady", { stage: activeMemoryStage });
+}
+
 function getMemoryStageInput(row) {
   const displayButton = row.querySelector("[data-memory-display].is-selected");
   const labels = [...row.querySelectorAll("[data-memory-label-button]")].map((button) =>
@@ -522,6 +546,7 @@ function createMemoryRow(stageNumber) {
         choice.classList.toggle("is-selected", choice === button);
       });
 
+      setActiveMemoryStage(stageNumber);
       updateMemoryResults();
     });
   });
@@ -530,6 +555,7 @@ function createMemoryRow(stageNumber) {
     button.addEventListener("click", () => {
       const nextLabel = (Number(button.textContent) % 4) + 1;
       button.textContent = `${nextLabel}`;
+      setActiveMemoryStage(stageNumber);
       updateMemoryResults();
     });
   });
@@ -548,7 +574,40 @@ function resetMemory() {
     });
   });
 
+  memoryKeyboardInput.value = "";
+  setActiveMemoryStage(1);
   updateMemoryResults();
+}
+
+function applyMemoryKeyboardEntry(value) {
+  if (!/^[1-4]{5}$/.test(value)) {
+    memoryKeyboardStatus.classList.add("is-error");
+    memoryKeyboardStatus.textContent = t("memory.keyboardInvalid");
+    return;
+  }
+
+  const row = getMemoryRows()[activeMemoryStage - 1];
+  const [display, ...labels] = value;
+
+  row.querySelectorAll("[data-memory-display]").forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.memoryDisplay === display);
+  });
+
+  row.querySelectorAll("[data-memory-label-button]").forEach((button, index) => {
+    button.textContent = labels[index];
+  });
+
+  updateMemoryResults();
+  memoryKeyboardStatus.classList.remove("is-error");
+  memoryKeyboardStatus.textContent = t("memory.keyboardApplied", { stage: activeMemoryStage });
+
+  if (activeMemoryStage < 5) {
+    setActiveMemoryStage(activeMemoryStage + 1);
+  } else {
+    memoryKeyboardStatus.textContent = t("memory.keyboardDone");
+  }
+
+  memoryKeyboardInput.value = "";
 }
 
 function normalizePasswordLetters(value) {
@@ -672,6 +731,7 @@ function setLanguage(language) {
   currentLanguage = translations[language] ? language : "en";
   applyTranslations();
   refreshGeneratedLabels();
+  setActiveMemoryStage(activeMemoryStage);
   updateSequenceResults();
   updateMemoryResults();
   updatePasswordResults();
@@ -701,6 +761,7 @@ for (let stageNumber = 1; stageNumber <= 5; stageNumber += 1) {
 }
 
 applyTranslations();
+setActiveMemoryStage(1);
 updateSequenceResults();
 updateMemoryResults();
 updatePasswordResults();
@@ -719,6 +780,19 @@ passwordInputs.forEach((input) => {
     input.value = normalized.toUpperCase();
     updatePasswordResults();
   });
+});
+
+memoryKeyboardInput.addEventListener("input", () => {
+  memoryKeyboardInput.value = memoryKeyboardInput.value.replace(/[^1-4]/g, "").slice(0, 5);
+});
+
+memoryKeyboardInput.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+  applyMemoryKeyboardEntry(memoryKeyboardInput.value);
 });
 
 morseInput.addEventListener("input", () => {

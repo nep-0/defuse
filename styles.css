@@ -197,6 +197,10 @@ h2 {
   border-bottom: 1px solid var(--line);
 }
 
+.memory-row.is-active {
+  box-shadow: inset 4px 0 0 var(--accent);
+}
+
 .wire-row:last-child,
 .sequence-row:last-child,
 .memory-row:last-child {
@@ -407,6 +411,61 @@ h2 {
 
 .memory-result.empty {
   color: var(--muted);
+}
+
+.memory-keyboard {
+  display: grid;
+  grid-template-columns: minmax(220px, 360px) 1fr;
+  gap: 12px;
+  align-items: end;
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.memory-keyboard label {
+  display: grid;
+  gap: 7px;
+}
+
+.memory-keyboard span {
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.memory-keyboard input {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #191919;
+  color: var(--text);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.memory-keyboard input:focus {
+  border-color: var(--accent);
+  outline: 0;
+}
+
+.memory-keyboard-status {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.memory-keyboard-status.is-error {
+  color: #f08880;
 }
 
 .password-tool,
@@ -680,6 +739,10 @@ h2 {
   }
 
   .memory-row {
+    grid-template-columns: 1fr;
+  }
+
+  .memory-keyboard {
     grid-template-columns: 1fr;
   }
 
