@@ -25,6 +25,7 @@
       <nav class="module-tabs" aria-label="Module selection">
         <button type="button" data-module-tab="complicated-wires" class="is-selected">Complicated Wires</button>
         <button type="button" data-module-tab="wire-sequences">Wire Sequences</button>
+        <button type="button" data-module-tab="memory">Memory</button>
       </nav>
 
       <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
@@ -63,6 +64,24 @@
           </div>
 
           <div id="sequenceRows"></div>
+        </div>
+      </section>
+
+      <section class="wire-panel is-hidden" id="memory" data-module-panel aria-labelledby="memory-table-title">
+        <div class="panel-title">
+          <h2 id="memory-table-title">Memory</h2>
+          <button class="reset-button" type="button" id="memoryResetButton">Reset</button>
+        </div>
+
+        <div class="wire-table" role="table" aria-label="Memory lookup">
+          <div class="memory-row table-head" role="row">
+            <div role="columnheader">Stage</div>
+            <div role="columnheader">Display</div>
+            <div role="columnheader">Button Labels</div>
+            <div role="columnheader">Press</div>
+          </div>
+
+          <div id="memoryRows"></div>
         </div>
       </section>
     </main>
@@ -106,6 +125,25 @@
         </div>
         <output class="occurrence" role="cell"></output>
         <output class="sequence-result" role="cell"></output>
+      </div>
+    </template>
+
+    <template id="memoryRowTemplate">
+      <div class="memory-row" role="row">
+        <div class="wire-number" role="cell"></div>
+        <div class="button-group memory-display-buttons" role="cell" aria-label="Displayed number">
+          <button type="button" data-memory-display="1">1</button>
+          <button type="button" data-memory-display="2">2</button>
+          <button type="button" data-memory-display="3">3</button>
+          <button type="button" data-memory-display="4">4</button>
+        </div>
+        <div class="memory-labels" role="cell" aria-label="Button labels from left to right">
+          <button type="button" data-memory-label-button data-position="1">1</button>
+          <button type="button" data-memory-label-button data-position="2">2</button>
+          <button type="button" data-memory-label-button data-position="3">3</button>
+          <button type="button" data-memory-label-button data-position="4">4</button>
+        </div>
+        <output class="memory-result" role="cell"></output>
       </div>
     </template>
 
