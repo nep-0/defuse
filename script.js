@@ -154,6 +154,10 @@ const translations = {
     "password.position5": "Position 5",
     "password.available": "{count} available",
     "password.noMatches": "No matching passwords",
+    "password.recommend": "Check position {position} next",
+    "password.recommendDetail": "Worst case leaves {worst}; average leaves {average}",
+    "password.allEntered": "All positions entered",
+    "password.noCandidates": "No candidates remain",
     "morse.substring": "Signal substring",
     "morse.alphabet": "Morse Alphabet",
     "morse.matches": "{count} matches",
@@ -205,6 +209,10 @@ const translations = {
     "password.position5": "第 5 位",
     "password.available": "可用 {count} 个",
     "password.noMatches": "没有匹配的密码",
+    "password.recommend": "下一步检查第 {position} 位",
+    "password.recommendDetail": "最差剩 {worst} 个；平均剩 {average} 个",
+    "password.allEntered": "所有位置已输入",
+    "password.noCandidates": "没有剩余候选",
     "morse.substring": "信号片段",
     "morse.alphabet": "摩尔斯字母表",
     "morse.matches": "匹配 {count} 个",
@@ -231,6 +239,7 @@ const memoryKeyboardStatus = document.querySelector("#memoryKeyboardStatus");
 const passwordInputs = document.querySelectorAll("[data-password-position]");
 const passwordList = document.querySelector("#passwordList");
 const passwordCount = document.querySelector("#passwordCount");
+const passwordRecommendation = document.querySelector("#passwordRecommendation");
 const passwordResetButton = document.querySelector("#passwordResetButton");
 const morseInput = document.querySelector("#morseInput");
 const morseList = document.querySelector("#morseList");
@@ -618,13 +627,69 @@ function getPasswordOptions() {
   return [...passwordInputs].map((input) => normalizePasswordLetters(input.value));
 }
 
-function updatePasswordResults() {
-  const options = getPasswordOptions();
-  const matches = passwordWords.filter((word) =>
+function getPasswordMatches(options) {
+  return passwordWords.filter((word) =>
     options.every((letters, index) => !letters || letters.includes(word[index]))
   );
+}
+
+function scorePasswordPosition(matches, position) {
+  const groups = new Map();
+
+  matches.forEach((word) => {
+    const letter = word[position];
+    groups.set(letter, (groups.get(letter) || 0) + 1);
+  });
+
+  const counts = [...groups.values()];
+  const worst = Math.max(...counts);
+  const average =
+    counts.reduce((sum, count) => sum + count * count, 0) / Math.max(matches.length, 1);
+
+  return {
+    position,
+    worst,
+    average,
+  };
+}
+
+function updatePasswordRecommendation(options, matches) {
+  passwordRecommendation.replaceChildren();
+
+  if (!matches.length) {
+    passwordRecommendation.textContent = t("password.noCandidates");
+    return;
+  }
+
+  const emptyPositions = options
+    .map((letters, index) => ({ letters, index }))
+    .filter(({ letters }) => !letters)
+    .map(({ index }) => index);
+
+  if (!emptyPositions.length) {
+    passwordRecommendation.textContent = t("password.allEntered");
+    return;
+  }
+
+  const [best] = emptyPositions
+    .map((position) => scorePasswordPosition(matches, position))
+    .sort((a, b) => a.worst - b.worst || a.average - b.average || a.position - b.position);
+
+  const detail = document.createElement("small");
+  passwordRecommendation.textContent = t("password.recommend", { position: best.position + 1 });
+  detail.textContent = t("password.recommendDetail", {
+    worst: best.worst,
+    average: best.average.toFixed(1),
+  });
+  passwordRecommendation.append(detail);
+}
+
+function updatePasswordResults() {
+  const options = getPasswordOptions();
+  const matches = getPasswordMatches(options);
 
   passwordCount.textContent = t("password.available", { count: matches.length });
+  updatePasswordRecommendation(options, matches);
   passwordList.replaceChildren();
 
   if (!matches.length) {

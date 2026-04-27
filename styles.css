@@ -517,6 +517,23 @@ h2 {
   gap: 10px;
 }
 
+.password-recommendation {
+  min-height: 46px;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--accent), transparent 86%);
+  color: var(--text);
+  font-weight: 800;
+}
+
+.password-recommendation small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .password-count {
   color: var(--accent);
   font-weight: 800;
