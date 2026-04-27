@@ -524,17 +524,23 @@ h2 {
     background: #1c1c1c;
   }
 
+  .wire-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .toggle {
     min-height: 56px;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 8px;
   }
 
   .toggle span {
-    display: none;
+    display: inline;
   }
 
   .result {
+    grid-column: 1 / -1;
+    justify-content: center;
     min-height: 56px;
     font-size: 1.7rem;
   }
