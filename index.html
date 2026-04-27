@@ -13,13 +13,6 @@
           <p class="eyebrow">Keep Talking and Nobody Explodes</p>
           <h1 data-i18n="app.title">Module Helper</h1>
         </div>
-        <div class="legend" aria-label="Result legend">
-          <span><strong>C</strong> <span data-i18n="legend.cut">Cut</span></span>
-          <span><strong>D</strong> <span data-i18n="legend.dontCut">Do not cut</span></span>
-          <span><strong>S</strong> <span data-i18n="legend.serial">Cut if serial number is even</span></span>
-          <span><strong>P</strong> <span data-i18n="legend.parallel">Cut if parallel port exists</span></span>
-          <span><strong>B</strong> <span data-i18n="legend.batteries">Cut if 2+ batteries</span></span>
-        </div>
         <div class="language-switcher" aria-label="Language">
           <button type="button" data-language="en" class="is-selected">EN</button>
           <button type="button" data-language="zh">中文</button>
@@ -40,6 +33,21 @@
           <button class="reset-button" type="button" id="resetButton" data-i18n="action.reset">Reset</button>
         </div>
 
+        <div class="condition-panel" aria-label="Complicated Wires conditions">
+          <label class="toggle condition-toggle">
+            <input type="checkbox" id="serialEvenCondition">
+            <span data-i18n="condition.serialEven">Serial number is even</span>
+          </label>
+          <label class="toggle condition-toggle">
+            <input type="checkbox" id="parallelPortCondition">
+            <span data-i18n="condition.parallelPort">Parallel port exists</span>
+          </label>
+          <label class="toggle condition-toggle">
+            <input type="checkbox" id="batteriesCondition">
+            <span data-i18n="condition.twoBatteries">2+ batteries</span>
+          </label>
+        </div>
+
         <div class="wire-table" role="table" aria-label="Complicated Wires lookup">
           <div class="wire-row table-head" role="row">
             <div role="columnheader" data-i18n="table.wire">Wire</div>
@@ -47,7 +55,7 @@
             <div role="columnheader" data-i18n="color.blue">Blue</div>
             <div role="columnheader" data-i18n="wire.star">Star</div>
             <div role="columnheader" data-i18n="wire.led">LED</div>
-            <div role="columnheader" data-i18n="table.result">Result</div>
+            <div role="columnheader" data-i18n="table.action">Action</div>
           </div>
 
           <div id="wireRows"></div>

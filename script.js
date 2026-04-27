@@ -125,6 +125,7 @@ const translations = {
     "action.reset": "Reset",
     "table.wire": "Wire",
     "table.result": "Result",
+    "table.action": "Action",
     "table.color": "Color",
     "table.to": "To",
     "table.occurrence": "Occurrence",
@@ -165,6 +166,9 @@ const translations = {
     "morse.noMatches": "No matching words",
     "generated.wire": "Wire {number}",
     "generated.stage": "Stage {number}",
+    "condition.serialEven": "Serial number is even",
+    "condition.parallelPort": "Parallel port exists",
+    "condition.twoBatteries": "2+ batteries",
   },
   zh: {
     "app.title": "模块助手",
@@ -181,6 +185,7 @@ const translations = {
     "action.reset": "重置",
     "table.wire": "线路",
     "table.result": "结果",
+    "table.action": "操作",
     "table.color": "颜色",
     "table.to": "连到",
     "table.occurrence": "次数",
@@ -221,6 +226,9 @@ const translations = {
     "morse.noMatches": "没有匹配的单词",
     "generated.wire": "线路 {number}",
     "generated.stage": "阶段 {number}",
+    "condition.serialEven": "序列号为偶数",
+    "condition.parallelPort": "有并口",
+    "condition.twoBatteries": "电池不少于 2 个",
   },
 };
 
@@ -230,6 +238,9 @@ const propertyOrder = ["red", "blue", "star", "led"];
 const rowContainer = document.querySelector("#wireRows");
 const rowTemplate = document.querySelector("#wireRowTemplate");
 const resetButton = document.querySelector("#resetButton");
+const serialEvenCondition = document.querySelector("#serialEvenCondition");
+const parallelPortCondition = document.querySelector("#parallelPortCondition");
+const batteriesCondition = document.querySelector("#batteriesCondition");
 const sequenceRowContainer = document.querySelector("#sequenceRows");
 const sequenceRowTemplate = document.querySelector("#sequenceRowTemplate");
 const sequenceResetButton = document.querySelector("#sequenceResetButton");
@@ -285,7 +296,17 @@ function getLookupKey(row) {
 
 function updateWireResult(row) {
   const result = row.querySelector(".result");
-  result.value = complicatedWiresLookup[getLookupKey(row)];
+  const lookup = complicatedWiresLookup[getLookupKey(row)];
+  const shouldCut =
+    lookup === "C" ||
+    (lookup === "S" && serialEvenCondition.checked) ||
+    (lookup === "P" && parallelPortCondition.checked) ||
+    (lookup === "B" && batteriesCondition.checked);
+
+  result.classList.toggle("cut", shouldCut);
+  result.classList.toggle("skip", !shouldCut);
+  result.value = shouldCut ? t("sequence.cut") : t("sequence.dontCut");
+  result.dataset.lookup = lookup;
 }
 
 function createWireRow(wireNumber) {
@@ -307,6 +328,10 @@ function createWireRow(wireNumber) {
 }
 
 function resetWires() {
+  serialEvenCondition.checked = false;
+  parallelPortCondition.checked = false;
+  batteriesCondition.checked = false;
+
   rowContainer.querySelectorAll("input[type='checkbox']").forEach((checkbox) => {
     checkbox.checked = false;
   });
@@ -806,6 +831,7 @@ function setLanguage(language) {
   refreshGeneratedLabels();
   setActiveMemoryStage(activeMemoryStage);
   updateSequenceResults();
+  rowContainer.querySelectorAll(".wire-row").forEach(updateWireResult);
   updateMemoryResults();
   updatePasswordResults();
   updateMorseResults();
@@ -846,6 +872,12 @@ sequenceResetButton.addEventListener("click", resetSequences);
 memoryResetButton.addEventListener("click", resetMemory);
 passwordResetButton.addEventListener("click", resetPasswords);
 morseResetButton.addEventListener("click", resetMorse);
+
+[serialEvenCondition, parallelPortCondition, batteriesCondition].forEach((condition) => {
+  condition.addEventListener("change", () => {
+    rowContainer.querySelectorAll(".wire-row").forEach(updateWireResult);
+  });
+});
 
 passwordInputs.forEach((input) => {
   input.addEventListener("input", () => {
