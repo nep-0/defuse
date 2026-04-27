@@ -112,6 +112,7 @@ const morseWords = [
 const translations = {
   en: {
     "app.title": "Module Helper",
+    "app.gameTitle": "Keep Talking and Nobody Explodes",
     "legend.cut": "Cut",
     "legend.dontCut": "Do not cut",
     "legend.serial": "Cut if serial number is even",
@@ -172,6 +173,7 @@ const translations = {
   },
   zh: {
     "app.title": "模块助手",
+    "app.gameTitle": "保持通话 没人爆炸",
     "legend.cut": "剪断",
     "legend.dontCut": "不要剪",
     "legend.serial": "序列号为偶数则剪断",
@@ -181,7 +183,7 @@ const translations = {
     "module.wireSequences": "线路序列",
     "module.memory": "记忆",
     "module.passwords": "密码",
-    "module.morseCode": "摩尔斯电码",
+    "module.morseCode": "摩斯电码",
     "action.reset": "重置",
     "table.wire": "线路",
     "table.result": "结果",
@@ -221,7 +223,7 @@ const translations = {
     "password.noCandidates": "没有剩余候选",
     "morse.substring": "信号片段",
     "morse.substringHint": "用空格分隔多个片段进行搜索。",
-    "morse.alphabet": "摩尔斯字母表",
+    "morse.alphabet": "摩斯字母表",
     "morse.matches": "匹配 {count} 个",
     "morse.noMatches": "没有匹配的单词",
     "generated.wire": "线路 {number}",
