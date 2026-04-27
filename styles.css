@@ -654,6 +654,7 @@ h2 {
   padding: 9px 10px;
   color: var(--text);
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .morse-letter strong {
@@ -664,6 +665,7 @@ h2 {
   color: var(--text);
   font-family: "Courier New", monospace;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .morse-letter:hover,
