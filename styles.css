@@ -94,7 +94,7 @@ h2 {
   margin-bottom: 16px;
 }
 
-.module-tabs a {
+.module-tabs button {
   min-height: 38px;
   padding: 10px 14px;
   border: 1px solid var(--line);
@@ -102,12 +102,15 @@ h2 {
   background: #1d1d1d;
   color: var(--text);
   font-weight: 700;
+  cursor: pointer;
   text-decoration: none;
 }
 
-.module-tabs a:hover,
-.module-tabs a:focus-visible {
+.module-tabs button:hover,
+.module-tabs button:focus-visible,
+.module-tabs button.is-selected {
   border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent), transparent 80%);
   outline: 0;
 }
 
@@ -115,6 +118,10 @@ h2 {
   border: 1px solid var(--line);
   background: var(--panel);
   margin-bottom: 24px;
+}
+
+.is-hidden {
+  display: none;
 }
 
 .panel-title {

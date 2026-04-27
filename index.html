@@ -23,11 +23,11 @@
       </header>
 
       <nav class="module-tabs" aria-label="Module selection">
-        <a href="#complicated-wires">Complicated Wires</a>
-        <a href="#wire-sequences">Wire Sequences</a>
+        <button type="button" data-module-tab="complicated-wires" class="is-selected">Complicated Wires</button>
+        <button type="button" data-module-tab="wire-sequences">Wire Sequences</button>
       </nav>
 
-      <section class="wire-panel" id="complicated-wires" aria-labelledby="wire-table-title">
+      <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
         <div class="panel-title">
           <h2 id="wire-table-title">Complicated Wires</h2>
           <button class="reset-button" type="button" id="resetButton">Reset</button>
@@ -47,7 +47,7 @@
         </div>
       </section>
 
-      <section class="wire-panel" id="wire-sequences" aria-labelledby="sequence-table-title">
+      <section class="wire-panel is-hidden" id="wire-sequences" data-module-panel aria-labelledby="sequence-table-title">
         <div class="panel-title">
           <h2 id="sequence-table-title">Wire Sequences</h2>
           <button class="reset-button" type="button" id="sequenceResetButton">Reset</button>

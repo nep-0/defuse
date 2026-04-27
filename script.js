@@ -30,6 +30,8 @@ const resetButton = document.querySelector("#resetButton");
 const sequenceRowContainer = document.querySelector("#sequenceRows");
 const sequenceRowTemplate = document.querySelector("#sequenceRowTemplate");
 const sequenceResetButton = document.querySelector("#sequenceResetButton");
+const moduleTabs = document.querySelectorAll("[data-module-tab]");
+const modulePanels = document.querySelectorAll("[data-module-panel]");
 
 function getLookupKey(row) {
   return propertyOrder
@@ -156,6 +158,16 @@ function resetSequences() {
   updateSequenceResults();
 }
 
+function showModule(moduleId) {
+  moduleTabs.forEach((tab) => {
+    tab.classList.toggle("is-selected", tab.dataset.moduleTab === moduleId);
+  });
+
+  modulePanels.forEach((panel) => {
+    panel.classList.toggle("is-hidden", panel.id !== moduleId);
+  });
+}
+
 for (let wireNumber = 1; wireNumber <= 6; wireNumber += 1) {
   rowContainer.append(createWireRow(wireNumber));
 }
@@ -168,3 +180,7 @@ updateSequenceResults();
 
 resetButton.addEventListener("click", resetWires);
 sequenceResetButton.addEventListener("click", resetSequences);
+
+moduleTabs.forEach((tab) => {
+  tab.addEventListener("click", () => showModule(tab.dataset.moduleTab));
+});
