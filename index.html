@@ -11,7 +11,7 @@
       <header class="module-header">
         <div>
           <p class="eyebrow">Keep Talking and Nobody Explodes</p>
-          <h1>Complicated Wires</h1>
+          <h1>Module Helper</h1>
         </div>
         <div class="legend" aria-label="Result legend">
           <span><strong>C</strong> Cut</span>
@@ -22,9 +22,14 @@
         </div>
       </header>
 
-      <section class="wire-panel" aria-labelledby="wire-table-title">
+      <nav class="module-tabs" aria-label="Module selection">
+        <a href="#complicated-wires">Complicated Wires</a>
+        <a href="#wire-sequences">Wire Sequences</a>
+      </nav>
+
+      <section class="wire-panel" id="complicated-wires" aria-labelledby="wire-table-title">
         <div class="panel-title">
-          <h2 id="wire-table-title">Six Wires</h2>
+          <h2 id="wire-table-title">Complicated Wires</h2>
           <button class="reset-button" type="button" id="resetButton">Reset</button>
         </div>
 
@@ -39,6 +44,25 @@
           </div>
 
           <div id="wireRows"></div>
+        </div>
+      </section>
+
+      <section class="wire-panel" id="wire-sequences" aria-labelledby="sequence-table-title">
+        <div class="panel-title">
+          <h2 id="sequence-table-title">Wire Sequences</h2>
+          <button class="reset-button" type="button" id="sequenceResetButton">Reset</button>
+        </div>
+
+        <div class="wire-table" role="table" aria-label="Wire Sequences lookup">
+          <div class="sequence-row table-head" role="row">
+            <div role="columnheader">Wire</div>
+            <div role="columnheader">Color</div>
+            <div role="columnheader">To</div>
+            <div role="columnheader">Occurrence</div>
+            <div role="columnheader">Result</div>
+          </div>
+
+          <div id="sequenceRows"></div>
         </div>
       </section>
     </main>
@@ -63,6 +87,25 @@
           <span>LED</span>
         </label>
         <output class="result" role="cell"></output>
+      </div>
+    </template>
+
+    <template id="sequenceRowTemplate">
+      <div class="sequence-row" role="row">
+        <div class="wire-number" role="cell"></div>
+        <div class="button-group color-buttons" role="cell" aria-label="Wire color">
+          <button type="button" data-sequence-color="">None</button>
+          <button type="button" data-sequence-color="red">Red</button>
+          <button type="button" data-sequence-color="blue">Blue</button>
+          <button type="button" data-sequence-color="black">Black</button>
+        </div>
+        <div class="button-group target-buttons" role="cell" aria-label="Wire destination">
+          <button type="button" data-sequence-target="A">A</button>
+          <button type="button" data-sequence-target="B">B</button>
+          <button type="button" data-sequence-target="C">C</button>
+        </div>
+        <output class="occurrence" role="cell"></output>
+        <output class="sequence-result" role="cell"></output>
       </div>
     </template>
 
