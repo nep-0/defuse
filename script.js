@@ -119,11 +119,13 @@ const translations = {
     "legend.parallel": "Cut if parallel port exists",
     "legend.batteries": "Cut if 2+ batteries",
     "module.complicatedWires": "Complicated Wires",
+    "module.wires": "Wires",
     "module.wireSequences": "Wire Sequences",
     "module.memory": "Memory",
     "module.passwords": "Passwords",
     "module.morseCode": "Morse Code",
     "action.reset": "Reset",
+    "action.backspace": "Backspace",
     "table.wire": "Wire",
     "table.result": "Result",
     "table.action": "Action",
@@ -131,8 +133,10 @@ const translations = {
     "table.to": "To",
     "table.occurrence": "Occurrence",
     "color.red": "Red",
+    "color.yellow": "Yellow",
     "color.blue": "Blue",
     "color.black": "Black",
+    "color.white": "White",
     "wire.star": "Star",
     "wire.led": "LED",
     "sequence.none": "None",
@@ -167,6 +171,11 @@ const translations = {
     "morse.noMatches": "No matching words",
     "generated.wire": "Wire {number}",
     "generated.stage": "Stage {number}",
+    "serial.even": "Serial even",
+    "serial.odd": "Serial odd",
+    "wires.needMore": "Enter 3 to 6 wires",
+    "wires.max": "Maximum 6 wires",
+    "wires.cut": "Cut wire {position}: {color}",
     "condition.serialEven": "Serial number is even",
     "condition.parallelPort": "Parallel port exists",
     "condition.twoBatteries": "2+ batteries",
@@ -180,11 +189,13 @@ const translations = {
     "legend.parallel": "有并口则剪断",
     "legend.batteries": "电池不少于 2 个则剪断",
     "module.complicatedWires": "复杂线路",
+    "module.wires": "线路",
     "module.wireSequences": "线路序列",
     "module.memory": "记忆",
     "module.passwords": "密码",
     "module.morseCode": "摩斯电码",
     "action.reset": "重置",
+    "action.backspace": "退格",
     "table.wire": "线路",
     "table.result": "结果",
     "table.action": "操作",
@@ -192,8 +203,10 @@ const translations = {
     "table.to": "连到",
     "table.occurrence": "次数",
     "color.red": "红",
+    "color.yellow": "黄",
     "color.blue": "蓝",
     "color.black": "黑",
+    "color.white": "白",
     "wire.star": "星星",
     "wire.led": "LED",
     "sequence.none": "无",
@@ -228,6 +241,11 @@ const translations = {
     "morse.noMatches": "没有匹配的单词",
     "generated.wire": "线路 {number}",
     "generated.stage": "阶段 {number}",
+    "serial.even": "序列号偶数",
+    "serial.odd": "序列号奇数",
+    "wires.needMore": "输入 3 到 6 根线",
+    "wires.max": "最多 6 根线",
+    "wires.cut": "剪第 {position} 根：{color}",
     "condition.serialEven": "序列号为偶数",
     "condition.parallelPort": "有并口",
     "condition.twoBatteries": "电池不少于 2 个",
@@ -237,9 +255,23 @@ const translations = {
 let currentLanguage = "en";
 
 const propertyOrder = ["red", "blue", "star", "led"];
+const wireColorKeys = {
+  red: "color.red",
+  yellow: "color.yellow",
+  blue: "color.blue",
+  black: "color.black",
+  white: "color.white",
+};
+const simpleWires = [];
 const rowContainer = document.querySelector("#wireRows");
 const rowTemplate = document.querySelector("#wireRowTemplate");
 const resetButton = document.querySelector("#resetButton");
+const wiresResetButton = document.querySelector("#wiresResetButton");
+const wiresParityButtons = document.querySelectorAll("[data-wires-parity]");
+const wiresColorButtons = document.querySelectorAll("[data-wire-color]");
+const wiresBackspaceButton = document.querySelector("[data-wire-backspace]");
+const wiresEntered = document.querySelector("#wiresEntered");
+const wiresResult = document.querySelector("#wiresResult");
 const serialEvenCondition = document.querySelector("#serialEvenCondition");
 const parallelPortCondition = document.querySelector("#parallelPortCondition");
 const batteriesCondition = document.querySelector("#batteriesCondition");
@@ -285,6 +317,94 @@ function applyTranslations() {
   languageButtons.forEach((button) => {
     button.classList.toggle("is-selected", button.dataset.language === currentLanguage);
   });
+}
+
+function getWireColorName(color) {
+  return t(wireColorKeys[color]);
+}
+
+function getSimpleWiresSerialParity() {
+  return document.querySelector("[data-wires-parity].is-selected").dataset.wiresParity;
+}
+
+function findLastWireIndex(color) {
+  return simpleWires.lastIndexOf(color);
+}
+
+function getSimpleWiresCutIndex() {
+  const count = simpleWires.length;
+  const redCount = simpleWires.filter((color) => color === "red").length;
+  const yellowCount = simpleWires.filter((color) => color === "yellow").length;
+  const blueCount = simpleWires.filter((color) => color === "blue").length;
+  const blackCount = simpleWires.filter((color) => color === "black").length;
+  const whiteCount = simpleWires.filter((color) => color === "white").length;
+  const serialOdd = getSimpleWiresSerialParity() === "odd";
+
+  if (count === 3) {
+    if (redCount === 0) return 1;
+    if (simpleWires[2] === "white") return 2;
+    if (blueCount > 1) return findLastWireIndex("blue");
+    return 2;
+  }
+
+  if (count === 4) {
+    if (redCount > 1 && serialOdd) return findLastWireIndex("red");
+    if (simpleWires[3] === "yellow" && redCount === 0) return 0;
+    if (blueCount === 1) return 0;
+    if (yellowCount > 1) return 3;
+    return 1;
+  }
+
+  if (count === 5) {
+    if (simpleWires[4] === "black" && serialOdd) return 3;
+    if (redCount === 1 && yellowCount > 1) return 0;
+    if (blackCount === 0) return 1;
+    return 0;
+  }
+
+  if (count === 6) {
+    if (yellowCount === 0 && serialOdd) return 2;
+    if (yellowCount === 1 && whiteCount > 1) return 3;
+    if (redCount === 0) return 5;
+    return 3;
+  }
+
+  return null;
+}
+
+function updateSimpleWires() {
+  wiresEntered.replaceChildren();
+
+  simpleWires.forEach((color) => {
+    const chip = document.createElement("div");
+    chip.className = `wire-chip ${color}`;
+    chip.textContent = getWireColorName(color);
+    wiresEntered.append(chip);
+  });
+
+  if (simpleWires.length < 3) {
+    wiresResult.value = t("wires.needMore");
+    return;
+  }
+
+  if (simpleWires.length > 6) {
+    wiresResult.value = t("wires.max");
+    return;
+  }
+
+  const cutIndex = getSimpleWiresCutIndex();
+  wiresResult.value = t("wires.cut", {
+    position: cutIndex + 1,
+    color: getWireColorName(simpleWires[cutIndex]),
+  });
+}
+
+function resetSimpleWires() {
+  simpleWires.length = 0;
+  wiresParityButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.wiresParity === "even");
+  });
+  updateSimpleWires();
 }
 
 function getLookupKey(row) {
@@ -832,6 +952,7 @@ function setLanguage(language) {
   applyTranslations();
   refreshGeneratedLabels();
   setActiveMemoryStage(activeMemoryStage);
+  updateSimpleWires();
   updateSequenceResults();
   rowContainer.querySelectorAll(".wire-row").forEach(updateWireResult);
   updateMemoryResults();
@@ -863,6 +984,7 @@ for (let stageNumber = 1; stageNumber <= 5; stageNumber += 1) {
 
 applyTranslations();
 setActiveMemoryStage(1);
+updateSimpleWires();
 updateSequenceResults();
 updateMemoryResults();
 updatePasswordResults();
@@ -870,6 +992,7 @@ renderMorseAlphabet();
 updateMorseResults();
 
 resetButton.addEventListener("click", resetWires);
+wiresResetButton.addEventListener("click", resetSimpleWires);
 sequenceResetButton.addEventListener("click", resetSequences);
 memoryResetButton.addEventListener("click", resetMemory);
 passwordResetButton.addEventListener("click", resetPasswords);
@@ -879,6 +1002,32 @@ morseResetButton.addEventListener("click", resetMorse);
   condition.addEventListener("change", () => {
     rowContainer.querySelectorAll(".wire-row").forEach(updateWireResult);
   });
+});
+
+wiresParityButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    wiresParityButtons.forEach((choice) => {
+      choice.classList.toggle("is-selected", choice === button);
+    });
+    updateSimpleWires();
+  });
+});
+
+wiresColorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    if (simpleWires.length >= 6) {
+      wiresResult.value = t("wires.max");
+      return;
+    }
+
+    simpleWires.push(button.dataset.wireColor);
+    updateSimpleWires();
+  });
+});
+
+wiresBackspaceButton.addEventListener("click", () => {
+  simpleWires.pop();
+  updateSimpleWires();
 });
 
 passwordInputs.forEach((input) => {

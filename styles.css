@@ -497,6 +497,102 @@ h2 {
   color: #f08880;
 }
 
+.wires-tool {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+
+.wires-parity-buttons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wires-color-buttons {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.wires-color-buttons [data-wire-color="red"] {
+  border-color: color-mix(in srgb, var(--danger), var(--line) 35%);
+}
+
+.wires-color-buttons [data-wire-color="yellow"] {
+  border-color: color-mix(in srgb, #dfc13f, var(--line) 35%);
+}
+
+.wires-color-buttons [data-wire-color="blue"] {
+  border-color: color-mix(in srgb, var(--blue), var(--line) 35%);
+}
+
+.wires-color-buttons [data-wire-color="black"] {
+  border-color: #777;
+}
+
+.wires-entered {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: 8px;
+  min-height: 48px;
+}
+
+.wire-chip {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+  color: var(--text);
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.wire-chip::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: var(--chip-color);
+}
+
+.wire-chip.red {
+  --chip-color: var(--danger);
+}
+
+.wire-chip.yellow {
+  --chip-color: #dfc13f;
+}
+
+.wire-chip.blue {
+  --chip-color: var(--blue);
+}
+
+.wire-chip.black {
+  --chip-color: #050505;
+}
+
+.wire-chip.white {
+  --chip-color: #f4f1ea;
+}
+
+.wires-result {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
 .password-tool,
 .morse-tool {
   display: grid;
@@ -816,6 +912,10 @@ h2 {
   .memory-labels,
   .memory-display-buttons {
     min-height: 64px;
+  }
+
+  .wires-color-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .password-inputs {

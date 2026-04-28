@@ -20,12 +20,39 @@
       </header>
 
       <nav class="module-tabs" aria-label="Module selection">
+        <button type="button" data-module-tab="wires" data-i18n="module.wires">Wires</button>
         <button type="button" data-module-tab="complicated-wires" data-i18n="module.complicatedWires" class="is-selected">Complicated Wires</button>
         <button type="button" data-module-tab="wire-sequences" data-i18n="module.wireSequences">Wire Sequences</button>
         <button type="button" data-module-tab="memory" data-i18n="module.memory">Memory</button>
         <button type="button" data-module-tab="passwords" data-i18n="module.passwords">Passwords</button>
         <button type="button" data-module-tab="morse-code" data-i18n="module.morseCode">Morse Code</button>
       </nav>
+
+      <section class="wire-panel is-hidden" id="wires" data-module-panel aria-labelledby="wires-title">
+        <div class="panel-title">
+          <h2 id="wires-title" data-i18n="module.wires">Wires</h2>
+          <button class="reset-button" type="button" id="wiresResetButton" data-i18n="action.reset">Reset</button>
+        </div>
+
+        <div class="wires-tool">
+          <div class="button-group wires-parity-buttons" aria-label="Serial number parity">
+            <button type="button" data-wires-parity="even" class="is-selected" data-i18n="serial.even">Serial even</button>
+            <button type="button" data-wires-parity="odd" data-i18n="serial.odd">Serial odd</button>
+          </div>
+
+          <div class="button-group wires-color-buttons" aria-label="Wire color entry">
+            <button type="button" data-wire-color="red" data-i18n="color.red">Red</button>
+            <button type="button" data-wire-color="yellow" data-i18n="color.yellow">Yellow</button>
+            <button type="button" data-wire-color="blue" data-i18n="color.blue">Blue</button>
+            <button type="button" data-wire-color="black" data-i18n="color.black">Black</button>
+            <button type="button" data-wire-color="white" data-i18n="color.white">White</button>
+            <button type="button" data-wire-backspace data-i18n="action.backspace">Backspace</button>
+          </div>
+
+          <div class="wires-entered" id="wiresEntered" aria-live="polite"></div>
+          <output class="wires-result" id="wiresResult"></output>
+        </div>
+      </section>
 
       <section class="wire-panel" id="complicated-wires" data-module-panel aria-labelledby="wire-table-title">
         <div class="panel-title">
