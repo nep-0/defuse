@@ -21,6 +21,7 @@
 
       <nav class="module-tabs" aria-label="Module selection">
         <button type="button" data-module-tab="wires" data-i18n="module.wires">Wires</button>
+        <button type="button" data-module-tab="button" data-i18n="module.button">Button</button>
         <button type="button" data-module-tab="complicated-wires" data-i18n="module.complicatedWires" class="is-selected">Complicated Wires</button>
         <button type="button" data-module-tab="wire-sequences" data-i18n="module.wireSequences">Wire Sequences</button>
         <button type="button" data-module-tab="memory" data-i18n="module.memory">Memory</button>
@@ -51,6 +52,66 @@
 
           <div class="wires-entered" id="wiresEntered" aria-live="polite"></div>
           <output class="wires-result" id="wiresResult"></output>
+        </div>
+      </section>
+
+      <section class="wire-panel is-hidden" id="button" data-module-panel aria-labelledby="button-title">
+        <div class="panel-title">
+          <h2 id="button-title" data-i18n="module.button">Button</h2>
+          <button class="reset-button" type="button" id="buttonResetButton" data-i18n="action.reset">Reset</button>
+        </div>
+
+        <div class="button-tool">
+          <div class="button-tool-section">
+            <h3 data-i18n="button.color">Button color</h3>
+            <div class="button-group button-compact-grid color-choice-grid" aria-label="Button color">
+              <button type="button" data-button-color="blue" class="color-choice blue-choice" data-i18n="color.blue">Blue</button>
+              <button type="button" data-button-color="white" class="color-choice white-choice" data-i18n="color.white">White</button>
+              <button type="button" data-button-color="yellow" class="color-choice yellow-choice" data-i18n="color.yellow">Yellow</button>
+              <button type="button" data-button-color="red" class="color-choice red-choice" data-i18n="color.red">Red</button>
+              <button type="button" data-button-color="other" class="is-selected" data-i18n="button.otherColor">Other</button>
+            </div>
+          </div>
+
+          <div class="button-tool-section">
+            <h3 data-i18n="button.text">Button text</h3>
+            <div class="button-group button-compact-grid" aria-label="Button text">
+              <button type="button" data-button-text="abort" data-i18n="button.abort">Abort</button>
+              <button type="button" data-button-text="detonate" data-i18n="button.detonate">Detonate</button>
+              <button type="button" data-button-text="hold" data-i18n="button.holdText">Hold</button>
+              <button type="button" data-button-text="other" class="is-selected" data-i18n="button.otherText">Other</button>
+            </div>
+          </div>
+
+          <div class="button-tool-section">
+            <h3 data-i18n="button.batteries">Battery count</h3>
+            <div class="button-group button-small-grid" aria-label="Battery count">
+              <button type="button" data-button-batteries="0" class="is-selected">0</button>
+              <button type="button" data-button-batteries="1">1</button>
+              <button type="button" data-button-batteries="2">2</button>
+              <button type="button" data-button-batteries="3">3+</button>
+            </div>
+          </div>
+
+          <div class="button-tool-section">
+            <h3 data-i18n="button.indicators">Lit indicators</h3>
+            <div class="button-group button-small-grid" aria-label="Lit indicators">
+              <button type="button" data-button-indicator="CAR">CAR</button>
+              <button type="button" data-button-indicator="FRK">FRK</button>
+            </div>
+          </div>
+
+          <div class="button-tool-section" id="stripColorSection">
+            <h3 data-i18n="button.stripColor">Strip color</h3>
+            <div class="button-group button-compact-grid color-choice-grid" aria-label="Strip color">
+              <button type="button" data-strip-color="blue" class="color-choice blue-choice" data-i18n="color.blue">Blue</button>
+              <button type="button" data-strip-color="white" class="color-choice white-choice" data-i18n="color.white">White</button>
+              <button type="button" data-strip-color="yellow" class="color-choice yellow-choice" data-i18n="color.yellow">Yellow</button>
+              <button type="button" data-strip-color="other" data-i18n="button.otherColor">Other</button>
+            </div>
+          </div>
+
+          <output class="button-result" id="buttonResult"></output>
         </div>
       </section>
 

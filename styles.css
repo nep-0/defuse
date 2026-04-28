@@ -593,6 +593,76 @@ h2 {
   text-align: center;
 }
 
+.button-tool {
+  display: grid;
+  gap: 16px;
+  padding: 16px;
+}
+
+.button-tool-section {
+  display: grid;
+  gap: 8px;
+}
+
+.button-tool-section h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.button-compact-grid {
+  grid-template-columns: repeat(auto-fit, minmax(94px, max-content));
+  justify-content: start;
+}
+
+.button-small-grid {
+  grid-template-columns: repeat(auto-fit, minmax(72px, max-content));
+  justify-content: start;
+}
+
+.button-compact-grid button,
+.button-small-grid button {
+  padding-inline: 12px;
+}
+
+.button-result {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-soft);
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.color-choice.blue-choice.is-selected {
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue), transparent 65%);
+}
+
+.color-choice.red-choice.is-selected {
+  border-color: var(--danger);
+  background: color-mix(in srgb, var(--danger), transparent 65%);
+}
+
+.color-choice.yellow-choice.is-selected {
+  border-color: #dfc13f;
+  background: color-mix(in srgb, #dfc13f, transparent 62%);
+}
+
+.color-choice.white-choice.is-selected {
+  border-color: #f4f1ea;
+  background: color-mix(in srgb, #f4f1ea, transparent 82%);
+}
+
 .password-tool,
 .morse-tool {
   display: grid;
@@ -915,6 +985,11 @@ h2 {
   }
 
   .wires-color-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .button-compact-grid,
+  .button-small-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

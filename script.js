@@ -120,6 +120,7 @@ const translations = {
     "legend.batteries": "Cut if 2+ batteries",
     "module.complicatedWires": "Complicated Wires",
     "module.wires": "Wires",
+    "module.button": "Button",
     "module.wireSequences": "Wire Sequences",
     "module.memory": "Memory",
     "module.passwords": "Passwords",
@@ -176,6 +177,19 @@ const translations = {
     "wires.needMore": "Enter 3 to 6 wires",
     "wires.max": "Maximum 6 wires",
     "wires.cut": "Cut wire {position}: {color}",
+    "button.color": "Button color",
+    "button.text": "Button text",
+    "button.batteries": "Battery count",
+    "button.indicators": "Lit indicators",
+    "button.stripColor": "Strip color",
+    "button.otherColor": "Other",
+    "button.abort": "Abort",
+    "button.detonate": "Detonate",
+    "button.holdText": "Hold",
+    "button.otherText": "Other",
+    "button.tap": "Press and immediately release",
+    "button.hold": "Hold the button. Release when the countdown timer has {digit} in any position.",
+    "button.holdNeedStrip": "Hold the button. Select the strip color to get the release digit.",
     "condition.serialEven": "Serial number is even",
     "condition.parallelPort": "Parallel port exists",
     "condition.twoBatteries": "2+ batteries",
@@ -190,6 +204,7 @@ const translations = {
     "legend.batteries": "电池不少于 2 个则剪断",
     "module.complicatedWires": "复杂线路",
     "module.wires": "线路",
+    "module.button": "按钮",
     "module.wireSequences": "线路序列",
     "module.memory": "记忆",
     "module.passwords": "密码",
@@ -246,6 +261,19 @@ const translations = {
     "wires.needMore": "输入 3 到 6 根线",
     "wires.max": "最多 6 根线",
     "wires.cut": "剪第 {position} 根：{color}",
+    "button.color": "按钮颜色",
+    "button.text": "按钮文字",
+    "button.batteries": "电池数量",
+    "button.indicators": "亮起指示灯",
+    "button.stripColor": "色条颜色",
+    "button.otherColor": "其他",
+    "button.abort": "中止",
+    "button.detonate": "引爆",
+    "button.holdText": "按住",
+    "button.otherText": "其他",
+    "button.tap": "按下并立即松开",
+    "button.hold": "按住按钮。倒计时任意位置出现 {digit} 时松开。",
+    "button.holdNeedStrip": "按住按钮。选择色条颜色以获得松开数字。",
     "condition.serialEven": "序列号为偶数",
     "condition.parallelPort": "有并口",
     "condition.twoBatteries": "电池不少于 2 个",
@@ -272,6 +300,13 @@ const wiresColorButtons = document.querySelectorAll("[data-wire-color]");
 const wiresBackspaceButton = document.querySelector("[data-wire-backspace]");
 const wiresEntered = document.querySelector("#wiresEntered");
 const wiresResult = document.querySelector("#wiresResult");
+const buttonResetButton = document.querySelector("#buttonResetButton");
+const buttonColorButtons = document.querySelectorAll("[data-button-color]");
+const stripColorButtons = document.querySelectorAll("[data-strip-color]");
+const buttonTextButtons = document.querySelectorAll("[data-button-text]");
+const buttonBatteryButtons = document.querySelectorAll("[data-button-batteries]");
+const buttonIndicatorButtons = document.querySelectorAll("[data-button-indicator]");
+const buttonResult = document.querySelector("#buttonResult");
 const serialEvenCondition = document.querySelector("#serialEvenCondition");
 const parallelPortCondition = document.querySelector("#parallelPortCondition");
 const batteriesCondition = document.querySelector("#batteriesCondition");
@@ -405,6 +440,71 @@ function resetSimpleWires() {
     button.classList.toggle("is-selected", button.dataset.wiresParity === "even");
   });
   updateSimpleWires();
+}
+
+function getSelectedButtonValue(selector, dataKey) {
+  const selected = document.querySelector(`${selector}.is-selected`);
+  return selected ? selected.dataset[dataKey] : "";
+}
+
+function hasLitIndicator(label) {
+  const indicator = document.querySelector(`[data-button-indicator="${label}"]`);
+  return indicator.classList.contains("is-selected");
+}
+
+function getButtonReleaseDigit(color) {
+  if (color === "blue") return 4;
+  if (color === "yellow") return 5;
+  return 1;
+}
+
+function shouldHoldButton() {
+  const color = getSelectedButtonValue("[data-button-color]", "buttonColor");
+  const text = getSelectedButtonValue("[data-button-text]", "buttonText");
+  const batteries = Number(getSelectedButtonValue("[data-button-batteries]", "buttonBatteries"));
+
+  if (color === "blue" && text === "abort") return true;
+  if (batteries > 1 && text === "detonate") return false;
+  if (color === "white" && hasLitIndicator("CAR")) return true;
+  if (batteries > 2 && hasLitIndicator("FRK")) return false;
+  if (color === "yellow") return true;
+  if (color === "red" && text === "hold") return false;
+  return true;
+}
+
+function updateButtonResult() {
+  const stripColor = getSelectedButtonValue("[data-strip-color]", "stripColor");
+
+  if (!shouldHoldButton()) {
+    buttonResult.value = t("button.tap");
+    return;
+  }
+
+  if (!stripColor) {
+    buttonResult.value = t("button.holdNeedStrip");
+    return;
+  }
+
+  buttonResult.value = t("button.hold", { digit: getButtonReleaseDigit(stripColor) });
+}
+
+function resetButtonModule() {
+  buttonColorButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.buttonColor === "other");
+  });
+  stripColorButtons.forEach((button) => {
+    button.classList.remove("is-selected");
+  });
+  buttonTextButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.buttonText === "other");
+  });
+  buttonBatteryButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.buttonBatteries === "0");
+  });
+  buttonIndicatorButtons.forEach((button) => {
+    button.classList.remove("is-selected");
+  });
+  updateButtonResult();
 }
 
 function getLookupKey(row) {
@@ -953,6 +1053,7 @@ function setLanguage(language) {
   refreshGeneratedLabels();
   setActiveMemoryStage(activeMemoryStage);
   updateSimpleWires();
+  updateButtonResult();
   updateSequenceResults();
   rowContainer.querySelectorAll(".wire-row").forEach(updateWireResult);
   updateMemoryResults();
@@ -985,6 +1086,7 @@ for (let stageNumber = 1; stageNumber <= 5; stageNumber += 1) {
 applyTranslations();
 setActiveMemoryStage(1);
 updateSimpleWires();
+updateButtonResult();
 updateSequenceResults();
 updateMemoryResults();
 updatePasswordResults();
@@ -993,6 +1095,7 @@ updateMorseResults();
 
 resetButton.addEventListener("click", resetWires);
 wiresResetButton.addEventListener("click", resetSimpleWires);
+buttonResetButton.addEventListener("click", resetButtonModule);
 sequenceResetButton.addEventListener("click", resetSequences);
 memoryResetButton.addEventListener("click", resetMemory);
 passwordResetButton.addEventListener("click", resetPasswords);
@@ -1028,6 +1131,41 @@ wiresColorButtons.forEach((button) => {
 wiresBackspaceButton.addEventListener("click", () => {
   simpleWires.pop();
   updateSimpleWires();
+});
+
+function wireSingleSelectButtons(buttons, dataAttribute) {
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      buttons.forEach((choice) => {
+        choice.classList.toggle("is-selected", choice === button);
+      });
+      updateButtonResult();
+    });
+  });
+}
+
+function wireOptionalSingleSelectButtons(buttons) {
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const shouldSelect = !button.classList.contains("is-selected");
+      buttons.forEach((choice) => {
+        choice.classList.toggle("is-selected", choice === button && shouldSelect);
+      });
+      updateButtonResult();
+    });
+  });
+}
+
+wireSingleSelectButtons(buttonColorButtons, "buttonColor");
+wireOptionalSingleSelectButtons(stripColorButtons);
+wireSingleSelectButtons(buttonTextButtons, "buttonText");
+wireSingleSelectButtons(buttonBatteryButtons, "buttonBatteries");
+
+buttonIndicatorButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    button.classList.toggle("is-selected");
+    updateButtonResult();
+  });
 });
 
 passwordInputs.forEach((input) => {
