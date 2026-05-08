@@ -89,6 +89,9 @@ const morseAlphabet = {
   y: "-.--",
   z: "--..",
 };
+const morseInverseAlphabet = Object.fromEntries(
+  Object.entries(morseAlphabet).map(([letter, code]) => [code, letter])
+);
 
 const morseWords = [
   { word: "shell", frequency: "3.505 MHz" },
@@ -166,7 +169,7 @@ const translations = {
     "password.allEntered": "All positions entered",
     "password.noCandidates": "No candidates remain",
     "morse.substring": "Signal substring",
-    "morse.substringHint": "Use spaces to search multiple substrings.",
+    "morse.substringHint": "Use . for short, , for long, / to make a letter. Spaces separate substrings.",
     "morse.alphabet": "Morse Alphabet",
     "morse.matches": "{count} matches",
     "morse.noMatches": "No matching words",
@@ -250,7 +253,7 @@ const translations = {
     "password.allEntered": "所有位置已输入",
     "password.noCandidates": "没有剩余候选",
     "morse.substring": "信号片段",
-    "morse.substringHint": "用空格分隔多个片段进行搜索。",
+    "morse.substringHint": "用 . 表示短, , 表示长, / 转成字母。空格分隔多个片段。",
     "morse.alphabet": "摩斯字母表",
     "morse.matches": "匹配 {count} 个",
     "morse.noMatches": "没有匹配的单词",
@@ -970,15 +973,94 @@ function wordToMorse(word) {
 }
 
 function normalizeMorseInput(value) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, "")
-    .replace(/\s+/g, " ")
-    .trimStart();
+  let result = "";
+  let buffer = "";
+
+  for (const char of value) {
+    if (char === "." || char === ",") {
+      buffer += char;
+      continue;
+    }
+
+    if (char === "/") {
+      if (buffer) {
+        const letter = morseInverseAlphabet[buffer.replace(/,/g, "-")];
+        result += letter ? letter.toUpperCase() : buffer;
+        buffer = "";
+      }
+      continue;
+    }
+
+    if (char === " ") {
+      if (buffer) {
+        result += buffer;
+        buffer = "";
+      }
+      if (result && !result.endsWith(" ")) {
+        result += " ";
+      }
+      continue;
+    }
+
+    if (/[a-z]/i.test(char)) {
+      if (buffer) {
+        result += buffer;
+        buffer = "";
+      }
+      result += char.toUpperCase();
+    }
+  }
+
+  if (buffer) {
+    result += buffer;
+  }
+
+  return result.replace(/\s+/g, " ").trimStart();
+}
+
+function getMorseSearchText(value) {
+  let result = "";
+  let buffer = "";
+
+  for (const char of value) {
+    if (char === "." || char === ",") {
+      buffer += char;
+      continue;
+    }
+
+    if (char === "/") {
+      if (buffer) {
+        const letter = morseInverseAlphabet[buffer.replace(/,/g, "-")];
+        if (letter) {
+          result += letter.toUpperCase();
+        }
+        buffer = "";
+      }
+      continue;
+    }
+
+    if (char === " ") {
+      buffer = "";
+      if (result && !result.endsWith(" ")) {
+        result += " ";
+      }
+      continue;
+    }
+
+    if (/[a-z]/i.test(char)) {
+      buffer = "";
+      result += char.toUpperCase();
+    }
+  }
+
+  return result.replace(/\s+/g, " ").trim();
 }
 
 function updateMorseResults() {
-  const substrings = normalizeMorseInput(morseInput.value).trim().split(" ").filter(Boolean);
+  const substrings = getMorseSearchText(morseInput.value)
+    .toLowerCase()
+    .split(" ")
+    .filter(Boolean);
   const matches = morseWords.filter(({ word }) =>
     substrings.every((substring) => word.includes(substring))
   );
